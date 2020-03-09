@@ -200,9 +200,10 @@ func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
 			var value interface{}
 			switch {
 			case key == f.FieldMap.resolve(FieldKeyTime):
-				if f.DisableTimestamp {
-					value = entry.Time.Format(timestampFormat)
+				if !f.DisableTimestamp {
+					continue
 				}
+				value = entry.Time.Format(timestampFormat)
 			case key == f.FieldMap.resolve(FieldKeyLevel):
 				continue
 				//value = entry.Level.String() todo
