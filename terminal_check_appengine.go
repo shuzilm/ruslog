@@ -1,6 +1,6 @@
 // +build appengine
 
-package ruslog
+package shuzilm
 
 import (
 	"io"

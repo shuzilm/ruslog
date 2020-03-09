@@ -1,4 +1,4 @@
-package ruslog
+package shuzilm
 
 import (
 	"bufio"

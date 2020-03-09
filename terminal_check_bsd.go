@@ -1,11 +1,11 @@
-// +build linux aix
+// +build darwin dragonfly freebsd netbsd openbsd
 // +build !js
 
-package ruslog
+package shuzilm
 
 import "golang.org/x/sys/unix"
 
-const ioctlReadTermios = unix.TCGETS
+const ioctlReadTermios = unix.TIOCGETA
 
 func isTerminal(fd int) bool {
 	_, err := unix.IoctlGetTermios(fd, ioctlReadTermios)

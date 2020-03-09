@@ -1,6 +1,6 @@
 // +build js nacl plan9
 
-package ruslog
+package shuzilm
 
 import (
 	"io"
