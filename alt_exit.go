@@ -1,4 +1,4 @@
-package shuzilm
+package ruslog
 
 // The following code was sourced and modified from the
 // https://github.com/tebeka/atexit package governed by the following license:

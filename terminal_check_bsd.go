@@ -1,7 +1,7 @@
 // +build darwin dragonfly freebsd netbsd openbsd
 // +build !js
 
-package shuzilm
+package ruslog
 
 import "golang.org/x/sys/unix"
 

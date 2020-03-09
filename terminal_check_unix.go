@@ -1,7 +1,7 @@
 // +build linux aix
 // +build !js
 
-package shuzilm
+package ruslog
 
 import "golang.org/x/sys/unix"
 

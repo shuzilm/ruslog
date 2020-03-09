@@ -1,6 +1,6 @@
 // +build !appengine,!js,windows
 
-package shuzilm
+package ruslog
 
 import (
 	"io"
