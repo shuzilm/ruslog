@@ -2,6 +2,73 @@
 
 #### 在 [logrus](https://github.com/sirupsen/logrus) 上的基础改了一下，去掉了 textFormat 的 key 打印
 
+##### example:
+ 
+```go
+package main
+
+import (
+	"bufio"
+	"os"
+	"path"
+	"time"
+
+	"github.com/pkg/errors"
+
+	"github.com/lestrrat-go/file-rotatelogs"
+	"github.com/shuzilm/ruslog"
+	"github.com/shuzilm/ruslog/hooks/lfshook"
+)
+
+func main() {
+	logger := NewLogger("/usr/log", "run")
+	logger.Println("this is ruslog test")
+}
+
+func NewLogger(dir, prefix string) *ruslog.Logger {
+	baseLogPath := path.Join(dir, prefix)
+	writer, err := rotatelogs.New(
+		baseLogPath+".%Y%m%d%H.log",
+		//rotatelogs.WithLinkName(baseLogPath), // 生成软链，指向最新日志文件
+		//rotatelogs.WithMaxAge(7*24*time.Hour),      // 文件最大保存时间
+		rotatelogs.WithRotationTime(time.Hour), // 日志切割时间间隔
+	)
+	if err != nil {
+		ruslog.Errorf("config local file system logger error. %v", errors.WithStack(err))
+	}
+
+	lfHook := lfshook.NewHook(
+		lfshook.WriterMap{
+			ruslog.DebugLevel: writer,
+			ruslog.InfoLevel:  writer,
+			ruslog.WarnLevel:  writer,
+			ruslog.ErrorLevel: writer,
+			ruslog.FatalLevel: writer,
+			ruslog.PanicLevel: writer,
+		},
+		&ruslog.TextFormatter{TimestampFormat: "2006-01-02 15:04:05"},
+	)
+
+	logger := ruslog.New()
+
+	// not print to console
+	f, _ := os.OpenFile(os.DevNull, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
+	w := bufio.NewWriter(f)
+	logger.SetOutput(w)
+
+	// set console output time format
+	logger.SetFormatter(&ruslog.TextFormatter{
+		DisableColors:    true,
+		DisableTimestamp: true,
+	})
+
+	logger.AddHook(lfHook)
+
+	return logger
+}
+
+```
+
 Logrus is a structured logger for Go (golang), completely API compatible with
 the standard library logger.
 
